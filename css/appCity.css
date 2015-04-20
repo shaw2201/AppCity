@@ -84,4 +84,7 @@ footer a:hover{
 #map-canvas {
     height: 100%;
 }
+#home{
+    float: bottom;
+}
 
