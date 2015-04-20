@@ -1,0 +1,101 @@
+ <!DOCTYPE html>
+<html manifest = "breakout.appcache">
+<head>
+    <link rel="icon" sizes="192x192" href="Images/breakoutiosf.png" />
+    <link rel="apple-touch-icon" href="Images/breakoutiosf.png" />
+    <link rel="shortcut icon" href="Images/breakoutiosf.png" type="image/x-icon" />
+    <title>Connor Shaw Breakout</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+        * {
+            margin: 0px;
+            padding: 5px;
+            border: 0px;
+        }
+        html, body {
+            -webkit-user-select: none;
+            -moz-user-select: -moz-none;
+            -ms-user-select: none;
+            height: 100%;
+            min-height: 100%;
+            overflow:hidden;
+            text-align: center;
+            font-size: larger;
+            height: 100%;
+        }
+        #Score{
+            float: left;
+        }
+        #Lives{
+            float: right;
+        }
+        #scoreMenu{
+            background-color: lightgray;
+        }
+        #highScore{
+            background-color: lightgray;
+        }
+        section.popupScore {
+            display: none;
+            width:8rem;
+            height:20rem;
+            background:rgba(105,100,100,0.8);
+            position: absolute;
+            margin-left:0px;
+        }
+        .score{
+            padding: 5vmin;
+            position: absolute;
+            top: 10vmin;
+            left: 50vw;
+            margin-left: -35vmin; /*half-width + padding*/
+            background: lightgray;
+            width: 60vmin;
+        }
+        button{
+            display:inline-block;
+            height: 2rem;
+            width: 3rem;
+            margin-bottom: 0.4rem;
+            margin-top: 0.4rem;
+            font-size: larger;
+            background-color: #BA1919;
+            box-shadow: 0 .1rem 0 #666, 0 .3rem 0 #666, 0 .4rem .4rem rgba(0,0,0,0.6);
+            outline: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>    
+    <main id ="main">
+        <section id="gamesection">
+        <div id="score">
+            <textarea readonly id="Score" editable ="false" style="height:1rem; width:5rem ;">Score: 0</textarea>
+            <textarea readonly id="Lives" editable ="false" style="height:1rem; width:4rem ;">Lives: 3</textarea>
+        </div>
+        
+        <div id ="canvasDiv">
+            <canvas id="myCanvas" width="360" height="100">
+                Sorry, your browser doesn't do canvas
+            </canvas>
+        </div>
+        </section>
+        <section class="popup" id="popupScore">
+            <div class="score">
+                <textarea readonly id="scoreMenu" editable ="false" style="height:1rem; width:6rem ;">You Scored: 0</textarea>
+                <textarea readonly id="highScore" editable ="false" style="height:1rem; width:8rem ;">Your High Score is: 0</textarea>
+                <p> Please press OK to restart</p>
+                <br> </br>
+                <button id="close"> OK </button>
+            </div>
+        </section>
+    </main>
+    
+   <script src="breakoutModel.js"></script>
+   <script src="breakoutView.js"></script>
+   <script src="breakoutController.js"></script>
+    
+</body>
+</html>
