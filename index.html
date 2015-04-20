@@ -55,8 +55,8 @@
         }
         button{
             display:inline-block;
-            height: 10rem;
-            width: 10rem;
+            height: 2rem;
+            width: 3rem;
             margin-bottom: 0.4rem;
             margin-top: 0.4rem;
             font-size: larger;
@@ -70,15 +70,25 @@
 
 <body>    
     <main id ="main">
-        <section class="Menu" id="Menu">
+        <section id="gamesection">
+        <div id="score">
+            <textarea readonly id="Score" editable ="false" style="height:1rem; width:5rem ;">Score: 0</textarea>
+            <textarea readonly id="Lives" editable ="false" style="height:1rem; width:4rem ;">Lives: 3</textarea>
+        </div>
+        
+        <div id ="canvasDiv">
+            <canvas id="myCanvas" width="360" height="100">
+                Sorry, your browser doesn't do canvas
+            </canvas>
+        </div>
+        </section>
+        <section class="popup" id="popupScore">
             <div class="score">
-                <p> Welcome to Group 15's app</p>
+                <textarea readonly id="scoreMenu" editable ="false" style="height:1rem; width:6rem ;">You Scored: 0</textarea>
+                <textarea readonly id="highScore" editable ="false" style="height:1rem; width:8rem ;">Your High Score is: 0</textarea>
+                <p> Please press OK to restart</p>
                 <br> </br>
-                <button id="close"> Track Route </button>
-                <button id="close"> Message Board </button>
-                <br></br>
-                <button id="close"> Event Board </button>
-                <button id="close"> Leisure centre's</button>
+                <button id="close"> OK </button>
             </div>
         </section>
     </main>
