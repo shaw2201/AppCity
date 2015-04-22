@@ -1,0 +1,91 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 21.04.2015, 12:29:12
+    Author     : Kristinka
+*/
+
+* {
+    margin: 0;
+
+}
+html, body {
+    font-family: sans-serif;
+    font-size: 3vh;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    height: 100%;
+    min-height: 100%;
+    overflow:auto;
+    text-align: center;
+    font-size: larger;
+    width: 100%;
+}
+button, #esubmit {
+    height: 100%;
+    width: 100%;
+    /*margin-bottom: 0.4rem;*/
+    /*margin-top: 0.4rem;*/
+    font-size: larger;
+    background-color: #548235;
+    outline: none;
+    cursor: pointer;
+}
+main{
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    height: calc(100% - 2rem);
+    background: #e2f0d9;
+    overflow:auto;
+}
+input {
+    font-size: 0.8rem;
+    max-width: 55vmin;
+}
+#eventsHolder{
+    width: 100%;
+    height: 90%;
+}
+
+#addEvent {
+    width: 100%;
+    height: 10%;
+}
+#postmessage{
+    margin-top: 0.4rem;
+    width: calc(100% - 5rem);
+}
+
+#formHolder {
+    display: none;
+    width:100vw;
+    height:100vh;
+    background:rgba(105,100,100,0.8);
+    position: absolute;
+    top:0px;
+    left:0px;
+    margin-left:0px;
+}
+#eventform{
+    padding: 5vmin;
+    position: absolute;
+    top: 10vmin;
+    left: 50vw;
+    margin-left: -35vmin; /*half-width + padding*/
+    background: #e2f0d9;
+    width: 60vmin;
+}
+
+#ecancel, #esubmit {
+    width: auto;
+    height: auto;
+}
+
+
+
+
+
