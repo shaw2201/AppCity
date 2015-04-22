@@ -3,18 +3,25 @@
 
 function TrackerController() {
    var trackerView = new TrackerView(),
-           trackerModel = new TrackerModel();
+           trackerModel = new TrackerModel(),
+           intervalObject,
+           updateMap = function(){
+               trackerModel.updatePosition(); 
+            };
    this.init = function() {
-        trackerView.init();
         trackerModel.init();
+        trackerView.setMap(trackerModel.getMap());
+        trackerView.init();
         trackerView.setButtonAction("start", function () {
-            trackerModel.setButton(true)
-            trackerModel.startPos = trackerModel.getLatLong();
+            trackerModel.setButton(true);
+            trackerModel.start();
+            intervalObject = window.setInterval(updateMap, 100);
         });
         trackerView.setButtonAction("stop", function () {
-            var lat = trackerModel.getStartLat()+0.0025, long = trackerModel.getStartLong();
-            console.log(lat + " " + long);
-            trackerModel.centreMap(lat, long);
+           trackerModel.stop();
+           var lat = trackerModel.getLatArray(), long = trackerModel.getLongArray();
+           trackerView.centreMap(lat[lat.length-1], long[long.length-1]);
+           window.clearInterval(intervalObject);
         });
     };
 }
