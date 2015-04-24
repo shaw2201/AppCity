@@ -5,15 +5,16 @@ function MBoardModel() {
     var username = "Unknown",
         postQueue = {},//associative array to hold posts
         postcallback, //the function to callback for each new message
-        highestIDseen = -1, //only show IDs over this number - initialise to -1 to show all
+        highestIDseen = -1,
+        msgid = -1;//only show IDs over this number - initialise to -1 to show all
         incrementMsgID = function () {
-            localStorage.rqb12154_chat_msgid++;
-            return localStorage.rqb12154_chat_msgid;
+            msgid++;
+            return msgid;
         },
         addItem = function (str) {
             console.log("adding " + str + " to queue");
             var id = incrementMsgID();
-            postQueue["_" + id] = "m=" + encodeURIComponent(str) + "&c=" + uuid + "&csID=" + id;
+            postQueue["_" + id] = "m=" + encodeURIComponent(str) + "&username=" + username + "&csID=" + msgid;
         },
         removeItem = function (id) {
             console.log("Removing " + id);
@@ -22,7 +23,7 @@ function MBoardModel() {
         postMessage = function (message) {
             // Initialize the Ajax request.   From http://en.wikipedia.org/wiki/Ajax_%28programming%29
             var xhr = new XMLHttpRequest();
-            xhr.open('get', 'server.php?' + message);
+            xhr.open('get', 'postMessage.php?' + message);
 
             // Track the state changes of the request.
             xhr.onreadystatechange = function () {
@@ -70,11 +71,11 @@ function MBoardModel() {
                             line = lines[index];
                             if (line.length > 0) {
                                 msg  = JSON.parse(line);
-                                seenID = parseInt(msg.id, 10);// need to parse and parse as decimal or else risk unexpected behaviour
+                                seenID = parseInt(msg.pid, 10);// need to parse and parse as decimal or else risk unexpected behaviour
                                 console.log("got post ID " + seenID + " (highest was " + highestIDseen + ")");
                                 if (seenID > highestIDseen) {
-                                    highestIDseen = msg.id;
-                                    postcallback(msg.comment);
+                                    highestIDseen = msg.pid;
+                                    postcallback(msg.username,msg.comment);
                                 }
                             }
                         }
@@ -97,15 +98,12 @@ function MBoardModel() {
 
     this.init = function () {
         //TODO handle no localStorage
-        if (!localStorage.rqb12154_chat_msgid) {
-            localStorage.rqb12154_chat_msgid = 0;
-        }
         if (localStorage.rqb12154_username) {
             username = localStorage.rqb12154_username;
         } else {
             localStorage.rqb12154_username = username;
         }
-        window.setInterval(checkQueue, 400);
-        window.setInterval(checkPosts, 300);
+        window.setInterval(checkQueue, 800);
+        window.setInterval(checkPosts, 600);
     };
 }
