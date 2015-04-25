@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 function TrackerModel() {
-    var pos = 0, poly, path, latArray = [], longArray = [], startLong = 0, startLat = 0, stopLat = 0, stopLong = 0, buttonPressed = true, options, map, content, infowindow, mapOptions = {
+    var pos = 0, poly, path, positionArray = [], options, map, content, infowindow, pathDistance = 0, testingVariable = 0.0001, mapOptions = {
         zoom: 18
     },
     polyOptions = {
@@ -27,27 +27,34 @@ function TrackerModel() {
             content: content
         };
 
-        infowindow = new google.maps.InfoWindow(options);
         map.setCenter(options.position);
-    };
+    },
+            updatePosition = function(position) {
 
-    this.getLatLong = function() {
+                pos = new google.maps.LatLng(position.coords.latitude,
+                        position.coords.longitude);
+                document.getElementById("check").innerHTML = "lat: " + position.coords.latitude + " long: " + position.coords.longitude + " watch";
+                positionArray.push(pos);
+                map.setCenter(pos);
+
+                path = poly.getPath();
+                path.push(pos);
+
+
+            }, error = function(error) {
+        console.log("failed")
+    },
+            options = {
+                timeout: 5000
+            };
+
+    this.init = function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                startLat = position.coords.latitude;
-                latArray.push(position.coords.latitude);
-                startLong = position.coords.longitude;
-                longArray.push(position.coords.longitude);
-
-                pos = new google.maps.LatLng(startLat,
-                        startLong);
+                pos = new google.maps.LatLng(position.coords.latitude,
+                        position.coords.longitude);
+                document.getElementById("check").innerHTML = "lat: " + position.coords.latitude + " long: " + position.coords.longitude;
                 map.setCenter(pos);
-                var placeMarker = new google.maps.Marker({
-                    position: pos,
-                    map: map,
-                    title: "Start"
-                });
-
             }, function() {
                 handleNoGeolocation(true);
             });
@@ -56,71 +63,68 @@ function TrackerModel() {
             // Browser doesn't support Geolocation
             handleNoGeolocation(false);
         }
-    };
-
-    this.init = function() {
-        this.getLatLong();
         map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
     };
 
-    this.centreMap = function(lat, long) {
-        map.setCenter(new google.maps.LatLng(lat, long));
+    this.getPosArray = function() {
+        return positionArray;
     };
 
-    this.setButton = function(value) {
-        buttonPressed = value;
-
-    };
-
-    this.getLatArray = function() {
-        return latArray;
-    };
-
-    this.getLongArray = function() {
-        return longArray;
-    };
 
     this.getMap = function() {
         return map;
     };
 
-    this.updatePosition = function() {
-         if (navigator.geolocation) {
+    this.start = function() {
+        if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                var currentLat = position.coords.latitude, currentLong = position.coords.longitude;
-                latArray.push(position.coords.latitude);
-                longArray.push(position.coords.longitude);
-                pos = new google.maps.LatLng(currentLat,
-                        currentLong);
+                pos = new google.maps.LatLng(position.coords.latitude,
+                        position.coords.longitude);
+                positionArray.push(pos);
+                console.log("fucks here");
                 map.setCenter(pos);
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    icon: 'https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/running.png',
+                    title: "Start"
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: "Start of route"
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
+                poly = new google.maps.Polyline(polyOptions);
+                poly.setMap(map);
                 path = poly.getPath();
-                path.push(new google.maps.LatLng(latArray[latArray.length - 1], longArray[longArray.length - 1]));
+                path.push(pos);
             }, function() {
                 handleNoGeolocation(true);
             });
 
-        } else {
-            // Browser doesn't support Geolocation
-            handleNoGeolocation(false);
-        }
-        
-    };
-
-    this.start = function() {
-        poly = new google.maps.Polyline(polyOptions);
-        poly.setMap(map);
-        path = poly.getPath();
-        startLat = latArray[0];
-        startLong = longArray[0];
-        path.push(new google.maps.LatLng(startLat,
-                startLong));
+        };
+        var watch = navigator.geolocation.watchPosition( updatePosition, error, options);
     };
 
     this.stop = function() {
-        stopLat = latArray[latArray.length - 1];
-        stopLong = longArray[longArray.length - 1];
-        console.log(startLat + " " + startLong + " stop: " + stopLat + " " + startLong);
+        pathDistance = google.maps.geometry.spherical.computeDistanceBetween(positionArray[0], positionArray[1]).toFixed(0);
+        pathDistance = parseFloat(pathDistance);
+        for (var i = 1; i < positionArray.length - 1; i++) {
+            pathDistance = pathDistance + parseFloat(google.maps.geometry.spherical.computeDistanceBetween(positionArray[i], positionArray[i + 1]).toFixed(0));
+        }
+        console.log(pathDistance);
+    };
+
+    this.getDistance = function() {
+        return pathDistance;
+    };
+
+    this.reset = function() {
+        pathDistance = 0;
+        positionArray = [];
+
     };
 
 }
