@@ -1,22 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Geolocation</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/css/trackingCss.css"> 
-    <meta charset="utf-8">
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-  </head>
-  <body>
-    <header>Route Tracking</header>
-    <div id="map-canvas"></div>
-    <div id="ButtonDiv">
-                <a href="./index.html"><button id="home">Home</button></a>
-                <button id="start">Start</button>
-                <button id="stop">Stop</button>
+    <head>
+        <title>Geolocation</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/css/trackingCss.css"> 
+        <meta charset="utf-8">
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    </head>
+    <body>
+        <header>Route Tracking</header>
+        
+        <div id="map-canvas"></div>
+        <div id="ButtonDiv">
+            <a href="./index.html"><button id="home">Home</button></a>
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+        </div>
+        <p id="check"> Please press OK to return or Post to share your route</p>
+        
+        <section id="popup">
+            <div class="distance">
+                <p id="distanceTraveled">You Scored: 0</p>
+                <p> Please press OK to return or Post to share your route</p>
+                <br> </br>
+                <button id="return"> OK </button>
+                <button id="post"> Post </button>
             </div>
-    <script src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/javascript/trackerModel.js"></script>
-    <script src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/javascript/trackerView.js"></script>
-    <script src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/javascript/trackerController.js"></script>
-  </body>    
+        </section>
+        
+        <div id="formHolder" style="display: none">
+                <form id="postingForm">
+                    Author:<br>
+                    <input type="text" id="fAuthor"><br>
+                    Location:<br>
+                    <input type="text" id="fLoc"><br>
+                    <input type="submit" value="Post" id="fSubmit">
+                </form>
+        </div>
+
+
+
+        <script src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/javascript/trackerModel.js"></script>
+        <script src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/javascript/trackerView.js"></script>
+        <script src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/javascript/trackerController.js"></script>
+    </body>    
 </html>
