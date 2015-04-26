@@ -78,12 +78,25 @@ button{
     float: bottom;
 }
 #home{
-    float: bottom;
+    float: left;
+    margin-bottom: 0.4rem;
+    margin-top: 0.4rem;
+    padding: 0.2rem;
 }
 #formHolder {
     display: none;
     width:50%;
     height:40%;
+    background:rgba(105,100,100,0.8);
+    position: absolute;
+    top:30%;
+    left:25%;
+    margin-left:0px;
+}
+#postMessage {
+    display: none;
+    width:50%;
+    height:30%;
     background:rgba(105,100,100,0.8);
     position: absolute;
     top:30%;

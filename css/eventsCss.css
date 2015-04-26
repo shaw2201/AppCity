@@ -10,7 +10,6 @@ and open the template in the editor.
 
 * {
     margin: 0;
-
 }
 html, body {
     font-family: sans-serif;
@@ -70,14 +69,16 @@ input {
     left:0px;
     margin-left:0px;
 }
-#eventform{
-    padding: 5vmin;
+
+#postMessage {
+    display: none;
+    width:100vw;
+    height:100vh;
+    background:rgba(105,100,100,0.8);
     position: absolute;
-    top: 10vmin;
-    left: 50vw;
-    margin-left: -35vmin; /*half-width + padding*/
-    background: #e2f0d9;
-    width: 60vmin;
+    top:0px;
+    left:0px;
+    margin-left:0px;
 }
 
 #ecancel, #esubmit {

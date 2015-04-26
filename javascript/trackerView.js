@@ -73,6 +73,20 @@ function TrackerView() {
         document.getElementById("formHolder").style.display = "none";
     };
     
+    this.showPost = function() {
+        document.getElementById("postMessage").style.display = "block";
+    };
+    this.hidePost = function() {
+        document.getElementById("postMessage").style.display = "none";
+    };
+    
+    this.showLoad = function() {
+        document.getElementById("loadMenu").style.display = "block";
+    };
+    this.hideLoad = function() {
+        document.getElementById("loadMenu").style.display = "none";
+    };
+    
     this.showMap = function() {
         document.getElementById("map-canvas").style.display = "block";
         document.getElementById("ButtonDiv").style.display = "block";

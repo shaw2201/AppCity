@@ -9,33 +9,50 @@
     </head>
     <body>
         <header>Route Tracking</header>
-        
+
         <div id="map-canvas"></div>
         <div id="ButtonDiv">
-            <a href="./index.html"><button id="home">Home</button></a>
+            <a href="./index.html"><p id="home"><img src="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/home.png"/></p></a>
             <button id="start">Start</button>
             <button id="stop">Stop</button>
+            <button id="load"> Load </button>
         </div>
         <p id="check"> Please press OK to return or Post to share your route</p>
-        
-        <section id="popup">
+
+        <section id="popup" style="display: none">
             <div class="distance">
                 <p id="distanceTraveled">You Scored: 0</p>
                 <p> Please press OK to return or Post to share your route</p>
                 <br> </br>
                 <button id="return"> OK </button>
                 <button id="post"> Post </button>
+
             </div>
         </section>
         
+        <section id="loadMenu" style="display: none">
+            <div class="path">
+                <p> Please select the path you wish to load</p>
+                <br> </br>
+                <button id="select"> Select </button>
+                <button id="cancel"> Cancel </button>
+
+            </div>
+        </section>
+
         <div id="formHolder" style="display: none">
-                <form id="postingForm">
-                    Author:<br>
-                    <input type="text" id="fAuthor"><br>
-                    Location:<br>
-                    <input type="text" id="fLoc"><br>
-                    <input type="submit" value="Post" id="fSubmit">
-                </form>
+            <form id="postingForm">
+                Author:<br>
+                <input type="text" id="fAuthor"><br>
+                Location:<br>
+                <input type="text" id="fLoc"><br>
+            </form>
+            <button id="fSubmit"> submit </button>
+        </div>
+
+        <div id="postMessage" style="display: none">
+            <p>You're path has been posted!</p>
+            <button id="postReturn"> OK </button>
         </div>
 
 

@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 function TrackerModel() {
-    var pos = 0, geo, poly, path, intervalObject, positionArray = [], marker, options, map, content, watch, infowindow, pathDistance = 0, testingVariable = 0.0001, mapOptions = {
+    var pos = 0, geo, poly, intervalObject, positionArray = [], marker, options, map, content, watch, infowindow, pathDistance = 0, testingVariable = 0.0001, mapOptions = {
         zoom: 18
     },
     polyOptions = {
@@ -52,7 +52,7 @@ function TrackerModel() {
         if (navigator.geolocation) {
             geo = navigator.geolocation;
             geo.getCurrentPosition(function(position) {
-                pos = new google.maps.LatLng(position.coords.latitude,
+                pos = new google.maps.LatLng(position.coords.latitude + 0.001,
                         position.coords.longitude);
                 document.getElementById("check").innerHTML = "lat: " + position.coords.latitude + " long: " + position.coords.longitude;
                 map.setCenter(pos);
@@ -104,7 +104,7 @@ function TrackerModel() {
 //                intervalObject = window.setInterval(updatePosition, 2000);
     };
     this.stop = function() {
-        if (positionArray.length == 1) {
+        if (positionArray.length === 1) {
             pathDistance = 0;
         } else {
             pathDistance = google.maps.geometry.spherical.computeDistanceBetween(positionArray[0], positionArray[1]).toFixed(0);
@@ -114,7 +114,6 @@ function TrackerModel() {
             }
         }
         testingVariable = 0.0001;
-        geo.clearWatch(watch);
         console.log(pathDistance);
     };
     this.getDistance = function() {
@@ -125,7 +124,40 @@ function TrackerModel() {
         positionArray = [];
         poly.setMap(null);
         marker.setMap(null);
+        geo.clearWatch(watch);
+        watch = 0;
+        geo = navigator.geolocation;
 //                window.clearInterval(intervalObject);
+    };
+
+    this.load = function() {
+        if (localStorage) {
+            if (localStorage.fqb12152_path) {
+                var p = localStorage.fqb12152_path;
+                console.log(p);
+                if(JSON.stringify(positionArray) === p){
+                    console.log("no error here");
+                }
+                console.log(JSON.parse(p));
+//                        pOptions = {
+//                            path: JSON.parse(p),
+//                            strokeColor: '#000000',
+//                            strokeOpacity: 1.0,
+//                            strokeWeight: 3
+//                        };
+//                var pol = new google.maps.Polyline(pOptions);
+//                pol.setMap(map);
+            }
+        }
+    };
+
+    this.postPath = function(author, loc) {
+        console.log(positionArray);
+        var p = JSON.stringify(positionArray);
+        if (localStorage) { // checks if local storage is available
+            localStorage.fqb12152_path = p;
+            console.log(author + " " + loc + " " + p);
+        }
     };
 }
 
