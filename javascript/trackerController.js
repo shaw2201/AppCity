@@ -6,6 +6,18 @@ function TrackerController() {
             trackerModel = new TrackerModel();
     this.init = function() {
 
+        trackerModel.setPathCallback(function(author, location, des, lat, long, pid) {
+            trackerView.addNewPath(author, location, des, lat, long, pid, function(l, lo) {
+                trackerView.hideLoad();
+                trackerView.showMap();
+                trackerModel.load(l, lo);
+                trackerModel.init();
+                var pos = trackerModel.getPosArray();
+                console.log(pos.length);
+                trackerView.centreMap(pos[pos.length - 1]);
+            });
+        });
+
         trackerView.setButtonAction("start", function() {
             trackerModel.start();
         });
@@ -30,16 +42,14 @@ function TrackerController() {
         });
 
         trackerView.setButtonAction("fSubmit", function() {
-            var author = document.getElementById("fAuthor").value, loc = document.getElementById("fLoc").value;
-            trackerModel.postPath(author, loc);
+            trackerModel.postPath();
             trackerView.showPost();
             trackerView.hideForm();
         });
 
         trackerView.setButtonAction("load", function() {
-//            trackerView.showLoad();
-//            trackerView.hideMap();
-            trackerModel.load();
+            trackerView.showLoad();
+            trackerView.hideMap();
         });
 
         trackerView.setButtonAction("cancel", function() {

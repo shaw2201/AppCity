@@ -103,4 +103,18 @@ button{
     left:25%;
     margin-left:0px;
 }
+#chatholder{
+    width: 100%;
+    height: calc(100% - 3.5rem);
+    text-align: left;
+    overflow:auto;
+    word-wrap:break-word;    
+}
+.chatPostDiv{
+    margin: 0.2rem;
+    padding: 0.2rem;
+    background: #c5e0b4;
+    outline-style:solid;
+    outline-width:thin;
+}
 

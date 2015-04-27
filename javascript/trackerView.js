@@ -82,9 +82,11 @@ function TrackerView() {
     
     this.showLoad = function() {
         document.getElementById("loadMenu").style.display = "block";
+        document.getElementById("chatholder").style.display = "block";
     };
     this.hideLoad = function() {
         document.getElementById("loadMenu").style.display = "none";
+        document.getElementById("chatholder").style.display = "none";
     };
     
     this.showMap = function() {
@@ -97,6 +99,30 @@ function TrackerView() {
         document.getElementById("ButtonDiv").style.display = "none";
         document.getElementById("map-canvas").style.display = "none";
         document.getElementById("check").style.display = "none";
+    };
+    
+    this.addNewPath = function (author, location, des, lat, long, id, callback) {
+        var chatHolder = document.getElementById("chatholder"),
+            node = document.createElement("DIV"),
+            node2 = document.createElement("DIV"),
+            node3 = document.createElement("DIV"),
+            namenode = document.createTextNode("Author: " + author),
+            locnode = document.createTextNode("Location: " + location),
+            desnode = document.createTextNode("Description: " + des);
+
+        node.className = "chatPostDiv";
+        node.id = id;
+        node.appendChild(namenode);
+        node2.appendChild(locnode);
+        node.appendChild(node2);
+        node3.appendChild(desnode);
+        node.appendChild(node3);
+        chatHolder.appendChild(node);
+        addMouseAndTouchUp(id, function(evt) {
+            evt.preventDefault();
+            console.log("clicked");
+            callback(lat, long);
+        });
     };
 }
 
