@@ -2,7 +2,7 @@
 /*global DOMParser */
 "use strict";
 function MsgBoardModel() {
-    var username = "Fraser",
+    var username = "Unknown",
         postQueue = {},//associative array to hold posts
         replyQueue = {},//associative array to hold replies
         postcallback,
@@ -23,14 +23,14 @@ function MsgBoardModel() {
         addPost = function (str) {
             console.log("adding " + str + " to post queue");
             var id = incrementMsgID();
-            if(str!==""){
+            if (str !== "") {
                 postQueue["_" + id] = "m=" + encodeURIComponent(str) + "&username=" + encodeURIComponent(username) + "&csID=" + encodeURIComponent(id);
             }
         },
         addReply = function (str) {
             console.log("adding " + str + " to reply queue");
             var id = incrementReplyID();
-            if(str!==""){
+            if (str !== "") {
                 replyQueue["_" + id] = "m=" + encodeURIComponent(str) + "&username=" + encodeURIComponent(username) + "&RID=" + encodeURIComponent(id) + "&PID=" + encodeURIComponent(ReplyToPID);
             }
         },
@@ -64,7 +64,6 @@ function MsgBoardModel() {
             };
 
             xhr.send(); // Send the request to send-ajax-data.php
-            window.setTimeout(checkQueue, 100);
             window.setTimeout(checkPosts, 300);
         },
         postReply = function (message) {
@@ -89,7 +88,6 @@ function MsgBoardModel() {
             };
 
             xhr.send(); // Send the request to send-ajax-data.php
-            window.setTimeout(checkQueue, 100);
             window.setTimeout(checkReplies, 300);
         },
         checkQueue = function () {
@@ -107,7 +105,6 @@ function MsgBoardModel() {
             // Initialize the Ajax request.   From http://en.wikipedia.org/wiki/Ajax_%28programming%29
             var xhr = new XMLHttpRequest();
             xhr.open('get', '../php/getMessages.php?last=' + (highestIDseen >= 0 ? highestIDseen : 0));
-
             // Track the state changes of the request.
             xhr.onreadystatechange = function () {
                 var DONE = 4, OK = 200, index, lines, line, msg, seenID; // readyState 4 = the request is done; status 200 = successful return
@@ -187,11 +184,20 @@ function MsgBoardModel() {
     this.setReplyToPID = function (id) {
         ReplyToPID = parseInt(id, 10);
     };
-
+    this.getUsername = function () {
+        return username;
+    };
+    this.setUsername = function (name) {
+        username = name;
+        if(localStorage)
+            localStorage.rqb12154_newusername = name;
+        if (localStorage.rqb12154_newusername) {
+            localStorage.rqb12154_newusername = name;
+        }
+    };
     this.init = function () {
-        if (localStorage.rqb12154_username) {
-            if(localStorage.rqb12154_username!=="Unknown")
-            username = localStorage.rqb12154_username;
+        if (localStorage.rqb12154_newusername) {
+            username = localStorage.rqb12154_newusername;
         }
         window.setInterval(checkQueue, 900);
         window.setInterval(checkPosts, 600);

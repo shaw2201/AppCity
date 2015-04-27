@@ -25,6 +25,10 @@ function MsgBoardView() {
         hideForm = function () {
             console.log("form hidden");
             document.getElementById("formHolder").style.display = "none";
+        },
+        hideNameForm = function () {
+            console.log("name form hidden");
+            document.getElementById("nameFormHolder").style.display = "none";
         };
 
     this.addNewPost = function (msg, username, id, callback) {
@@ -40,7 +44,7 @@ function MsgBoardView() {
         node2.appendChild(msgnode);
         node.appendChild(node2);
         chatHolder.appendChild(node);
-        document.getElementById("postmessage").scrollIntoView();
+        node.scrollIntoView();
         addMouseAndTouchUp(id, function(evt) {
             evt.preventDefault();
             showForm();
@@ -67,7 +71,7 @@ function MsgBoardView() {
         addMouseAndTouchUp(button, callback);
     };
     this.setReplyHandler = function (callback) {
-        setButtonAction("rsubmit", function (evt) {
+        document.getElementById("replyform").addEventListener("submit", function (evt) {
             console.log("Reply Posted");
             var val = document.getElementById("replyMsg").value;
             document.getElementById("replyMsg").value = "";
@@ -77,12 +81,22 @@ function MsgBoardView() {
         });
     };
     this.setPostHandler = function (callback) {
-        document.getElementById("chatform").addEventListener("submit", function(evt) {
+        document.getElementById("chatform").addEventListener("submit", function (evt) {
             console.log("Msg Posted");
             var val = document.getElementById("postmessage").value;
             document.getElementById("postmessage").value = "";
             evt.preventDefault();
             callback(val);
+        });
+    };
+    this.setNameHandler = function (callback) {
+        document.getElementById("nameform").addEventListener("submit", function (evt) {
+            var val = document.getElementById("name").value;
+            console.log("name set to : " + val);
+            document.getElementById("name").value = "";
+            evt.preventDefault();
+            callback(val);
+            hideNameForm();
         });
     };
     this.showForm = function () {
@@ -92,6 +106,14 @@ function MsgBoardView() {
     this.hideForm = function () {
         console.log("form hidden");
         document.getElementById("formHolder").style.display = "none";
+    };
+    this.showNameForm = function () {
+        console.log("name form shown");
+        document.getElementById("nameFormHolder").style.display = "block";
+    };
+    this.hideNameForm = function () {
+        console.log("name form hidden");
+        document.getElementById("nameFormHolder").style.display = "none";
     };
     this.init = function () {
     };

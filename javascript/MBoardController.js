@@ -17,6 +17,14 @@ function MsgBoardController() {
         MBoardView.setButtonAction("rcancel", function () {
             MBoardView.hideForm();
         });
+        MBoardView.setButtonAction("ncancel", function () {
+            MBoardView.hideNameForm();
+        });
+        console.log("name is : " + MBoardModel.getUsername());
+        MBoardView.setNameHandler(MBoardModel.setUsername);
+        if (MBoardModel.getUsername() == "Unknown") {
+            MBoardView.showNameForm();
+        }
     };
 }
 

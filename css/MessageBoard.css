@@ -94,13 +94,44 @@ input {
     width: 60%;
     height:60%;
 }
-
+#nameFormHolder {
+    display: none;
+    width:100%;
+    height:100vh;
+    background:rgba(105,100,100,0.8);
+    position: absolute;
+    top:0px;
+    left:0px;
+    margin-left:0px;
+}
+#nameform{
+    padding: 5rem;
+    position: absolute;
+    top: 10vmin;
+    left: 50vw;
+    margin-left: calc(-30% - 5rem); /*half-width + padding*/
+    background: #e2f0d9;
+    width: 60%;
+    height:60%;
+}
 #replyMsg{
     margin-top: 0.4rem;
     width: 100%;
     height: 80%;
 }
 #rcancel, #rsubmit {
+    width: 40%;
+    height: 10%;
+    background: #548235;
+    color: white;
+    border: none;
+    margin-top: 0.4rem;
+    padding: 0.2rem;
+    font-size: larger;
+    outline: none;
+    cursor: pointer;
+}
+#ncancel, #nsubmit {
     width: 40%;
     height: 10%;
     background: #548235;
