@@ -1,10 +1,9 @@
 <?php
-
 function connectOrDie() {
     $username = "rqb12154";
     $password = "ellanhod";
     $database = "rqb12154";
-    $servername = "devweb3000.cis.strath.ac.uk";
+    $servername = "devweb2014.cis.strath.ac.uk";
 
     $mysqli = new mysqli($servername, $username, $password, $database);
 
@@ -15,7 +14,7 @@ function connectOrDie() {
 }
 
 function getPosts($mysqli, $last) {
-    if ($result = $mysqli->query('SELECT * FROM `message_board` WHERE `pid`>' . $last . ' ORDER BY `pid` ASC')) {
+    if ($result = $mysqli->query('SELECT * FROM `reply_board` WHERE `rid`>' . $last . ' ORDER BY `rid` ASC')) {
         $comments = array();
 
         while ($row = $result->fetch_array(MYSQLI_ASSOC)) {

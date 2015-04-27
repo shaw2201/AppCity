@@ -139,21 +139,15 @@ function TrackerModel() {
                     console.log("no error here");
                 }
                 console.log(JSON.parse(p));
-//                        pOptions = {
-//                            path: JSON.parse(p),
-//                            strokeColor: '#000000',
-//                            strokeOpacity: 1.0,
-//                            strokeWeight: 3
-//                        };
-//                var pol = new google.maps.Polyline(pOptions);
-//                pol.setMap(map);
+                var pol = new google.maps.Polyline(p);
+                pol.setMap(map);
             }
         }
     };
 
     this.postPath = function(author, loc) {
         console.log(positionArray);
-        var p = JSON.stringify(positionArray);
+        var p = JSON.stringify(polyOptions);
         if (localStorage) { // checks if local storage is available
             localStorage.fqb12152_path = p;
             console.log(author + " " + loc + " " + p);

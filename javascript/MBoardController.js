@@ -2,17 +2,24 @@
 /*global DOMParser */
 "use strict";
 
-function MBoardController() {
-    var testModel = new TestModel(),
-        testView = new TestView();
-    
+function MsgBoardController() {
+    var MBoardModel = new MsgBoardModel(),
+        MBoardView  = new MsgBoardView();
+
     this.init = function () {
-        testModel.init();
-        testModel.setAddPostCallback(testView.addNewPost);
-        testView.setPostHandler(testModel.post);
+        MBoardModel.init();
+        MBoardModel.setPostCallback(function (message, username, pid) {
+            MBoardView.addNewPost(message, username, pid, MBoardModel.setReplyToPID);
+        });
+        MBoardModel.setReplyCallback(MBoardView.addNewReply);
+        MBoardView.setPostHandler(MBoardModel.post);
+        MBoardView.setReplyHandler(MBoardModel.reply);
+        MBoardView.setButtonAction("rcancel", function () {
+            MBoardView.hideForm();
+        });
     };
 }
-    
-var mBoardController = new MBoardController();
 
-window.addEventListener("load", mBoardController.init, false);
+var MBoardController = new MsgBoardController();
+
+window.addEventListener("load", MBoardController.init, false);

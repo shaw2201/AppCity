@@ -1,29 +1,51 @@
 /*jslint node: true, browser: true */
 /*global DOMParser */
 "use strict";
-function MBoardModel() {
-    var username = "Unknown",
+function MsgBoardModel() {
+    var username = "Fraser",
         postQueue = {},//associative array to hold posts
-        postcallback, //the function to callback for each new message
-        highestIDseen = -1,
-        msgid = -1;//only show IDs over this number - initialise to -1 to show all
+        replyQueue = {},//associative array to hold replies
+        postcallback,
+        replycallback,//the function to callback for each new message
+        highestIDseen = -1,//only show IDs over this number - initialise to -1 to show all
+        highestRIDseen = -1,
+        msgid = -1,
+        replyid = -1,
+        ReplyToPID = -1,
         incrementMsgID = function () {
-            msgid++;
+            msgid += 1;
             return msgid;
         },
-        addItem = function (str) {
-            console.log("adding " + str + " to queue");
-            var id = incrementMsgID();
-            postQueue["_" + id] = "m=" + encodeURIComponent(str) + "&username=" + username + "&csID=" + msgid;
+        incrementReplyID = function () {
+            replyid += 1;
+            return replyid;
         },
-        removeItem = function (id) {
-            console.log("Removing " + id);
+        addPost = function (str) {
+            console.log("adding " + str + " to post queue");
+            var id = incrementMsgID();
+            if(str!==""){
+                postQueue["_" + id] = "m=" + encodeURIComponent(str) + "&username=" + encodeURIComponent(username) + "&csID=" + encodeURIComponent(id);
+            }
+        },
+        addReply = function (str) {
+            console.log("adding " + str + " to reply queue");
+            var id = incrementReplyID();
+            if(str!==""){
+                replyQueue["_" + id] = "m=" + encodeURIComponent(str) + "&username=" + encodeURIComponent(username) + "&RID=" + encodeURIComponent(id) + "&PID=" + encodeURIComponent(ReplyToPID);
+            }
+        },
+        removePost = function (id) {
+            console.log("Removing post " + id);
             delete postQueue["_" + id];
+        },
+        removeReply = function (id) {
+            console.log("Removing reply " + id);
+            delete replyQueue["_" + id];
         },
         postMessage = function (message) {
             // Initialize the Ajax request.   From http://en.wikipedia.org/wiki/Ajax_%28programming%29
             var xhr = new XMLHttpRequest();
-            xhr.open('get', 'postMessage.php?' + message);
+            xhr.open('get', '../php/postMessage.php?' + message);
 
             // Track the state changes of the request.
             xhr.onreadystatechange = function () {
@@ -33,7 +55,7 @@ function MBoardModel() {
                         if (isNaN(xhr.responseText)) {
                             console.log("error from server " + xhr.responseText);
                         } else {
-                            removeItem(xhr.responseText);
+                            removePost(xhr.responseText);
                         }
                     } else {
                         console.log('Error: ' + xhr.status); // An error occurred during the request.
@@ -44,21 +66,47 @@ function MBoardModel() {
             xhr.send(); // Send the request to send-ajax-data.php
             window.setTimeout(checkQueue, 100);
             window.setTimeout(checkPosts, 300);
-       },
+        },
+        postReply = function (message) {
+            // Initialize the Ajax request.   From http://en.wikipedia.org/wiki/Ajax_%28programming%29
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', '../php/postReply.php?' + message);
+
+            // Track the state changes of the request.
+            xhr.onreadystatechange = function () {
+                var DONE = 4, OK = 200; // readyState 4 = the request is done; status 200 = successful return
+                if (xhr.readyState === DONE) {
+                    if (xhr.status === OK) {
+                        if (isNaN(xhr.responseText)) {
+                            console.log("error from server " + xhr.responseText);
+                        } else {
+                            removeReply(xhr.responseText);
+                        }
+                    } else {
+                        console.log('Error: ' + xhr.status); // An error occurred during the request.
+                    }
+                }
+            };
+
+            xhr.send(); // Send the request to send-ajax-data.php
+            window.setTimeout(checkQueue, 100);
+            window.setTimeout(checkReplies, 300);
+        },
         checkQueue = function () {
-            console.log("checking queue");
             var key;
             for (key in postQueue) {
+                console.log("postMessage" + postQueue[key]);
                 postMessage(postQueue[key]);
+            }
+            for (key in replyQueue) {
+                console.log("replyMessage" + replyQueue[key]);
+                postReply(replyQueue[key]);
             }
         },
         checkPosts = function () {
             // Initialize the Ajax request.   From http://en.wikipedia.org/wiki/Ajax_%28programming%29
             var xhr = new XMLHttpRequest();
-            
-            console.log("checking posts from " + highestIDseen);
-
-            xhr.open('get', 'getmessages.php?last=' + (highestIDseen >= 0 ? highestIDseen : 0));
+            xhr.open('get', '../php/getMessages.php?last=' + (highestIDseen >= 0 ? highestIDseen : 0));
 
             // Track the state changes of the request.
             xhr.onreadystatechange = function () {
@@ -75,7 +123,39 @@ function MBoardModel() {
                                 console.log("got post ID " + seenID + " (highest was " + highestIDseen + ")");
                                 if (seenID > highestIDseen) {
                                     highestIDseen = msg.pid;
-                                    postcallback(msg.username,msg.comment);
+                                    postcallback(msg.message, msg.username, msg.pid);
+                                }
+                            }
+                        }
+                    } else {
+                        console.log('Error: ' + xhr.status); // An error occurred during the request.
+                    }
+                }
+            };
+
+            xhr.send(); // Send the request to send-ajax-data.php
+        },
+        checkReplies = function () {
+            // Initialize the Ajax request.   From http://en.wikipedia.org/wiki/Ajax_%28programming%29
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', '../php/getReplies.php?last=' + (highestRIDseen >= 0 ? highestRIDseen : 0));
+
+            // Track the state changes of the request.
+            xhr.onreadystatechange = function () {
+                var DONE = 4, OK = 200, index, lines, line, msg, seenID; // readyState 4 = the request is done; status 200 = successful return
+                if (xhr.readyState === DONE) {
+                    if (xhr.status === OK) {
+                        //console.log("reply = "+xhr.responseText);
+                        lines = xhr.responseText.split("\n");
+                        for (index = 0; index < lines.length; index++) {
+                            line = lines[index];
+                            if (line.length > 0) {
+                                msg  = JSON.parse(line);
+                                seenID = parseInt(msg.rid, 10);// need to parse and parse as decimal or else risk unexpected behaviour
+                                console.log("got reply ID " + seenID + " (highest was " + highestRIDseen + ")");
+                                if (seenID > highestRIDseen) {
+                                    highestRIDseen = msg.rid;
+                                    replycallback(msg.message, msg.username, msg.pid);
                                 }
                             }
                         }
@@ -89,21 +169,32 @@ function MBoardModel() {
         };
 
     this.post = function (msg) {
-        addItem(msg);
+        addPost(msg);
+    };
+    this.reply = function (msg) {
+        if (ReplyToPID !== -1) {
+            addReply(msg);
+        }
     };
 
-    this.setAddPostCallback = function (f) {
-      postcallback = f; 
+    this.setReplyCallback = function (f) {
+        replycallback = f;
+    };
+
+    this.setPostCallback = function (f) {
+        postcallback = f;
+    };
+    this.setReplyToPID = function (id) {
+        ReplyToPID = parseInt(id, 10);
     };
 
     this.init = function () {
-        //TODO handle no localStorage
         if (localStorage.rqb12154_username) {
+            if(localStorage.rqb12154_username!=="Unknown")
             username = localStorage.rqb12154_username;
-        } else {
-            localStorage.rqb12154_username = username;
         }
-        window.setInterval(checkQueue, 800);
+        window.setInterval(checkQueue, 900);
         window.setInterval(checkPosts, 600);
+        window.setInterval(checkReplies, 700);
     };
 }

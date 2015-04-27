@@ -14,19 +14,27 @@ function connectOrDie() {
     return $mysqli;
 }
 
-function addNewPost($mysqli, $post, $clientID, $clientSideID) {
-        
-    if ($mysqli->query("INSERT INTO message_board (username, message)
-                        VALUES ('$clientID','$post')"))
+function addNewPost($mysqli, $reply, $username, $clientSideID, $pid) {
+
+    if ($mysqli->query("INSERT INTO reply_board (username, message, pid)
+                        VALUES ('$username','$reply','$pid')")) {
         return $clientSideID;
-    else
+    } else {
         die("Query failed: %s " . $mysqli->error);
+    }
 }
 
 $mysqli = connectOrDie();
+
 $post = mysqli_real_escape_string($mysqli, urldecode($_GET["m"]));
+
 $clientID = mysqli_real_escape_string($mysqli, urldecode($_GET["username"]));
-$clientSideID = mysqli_real_escape_string($mysqli, urldecode($_GET["csID"]));
-$id = addNewPost($mysqli, $post, $clientID, $clientSideID);
+
+$clientSideID = mysqli_real_escape_string($mysqli, urldecode($_GET["RID"]));
+
+$pid = mysqli_real_escape_string($mysqli, urldecode($_GET["PID"]));
+
+$id = addNewPost($mysqli, $post, $clientID, $clientSideID, $pid);
+
 echo "$id";
 ?>
