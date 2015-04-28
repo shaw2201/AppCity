@@ -9,10 +9,10 @@
     <body>
         <header>Event Board</header>
         <main>
-            <div id="eventsHolder">
-                <div class="eventPostDiv">Posts will be here</div>
+            <div id="eventsHolder"></div>
+            <div id="addEvent">
+                <button>Add Event</button>
             </div>
-            <div id="addEvent"><button>Add Event</button></div>
             <div id="formHolder" style="display: none">
                 <form id="eventform">
                     Event name:<br>
@@ -27,11 +27,9 @@
                     <input type="text" id="elocation"><br>
                     <input type="submit" value="Post" id="esubmit">
                     <button id="ecancel">Cancel</button>
-                </form>
-    
+                </form>  
             </div>
-        </main>
-    
+        </main>   
     <script src="../javascript/eventModel.js"></script>
     <script src="../javascript/eventView.js"></script>
     <script src="../javascript/eventController.js"></script>

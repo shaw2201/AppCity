@@ -16,6 +16,12 @@ function eventController() {
         view.setButtonAction("ecancel", function () {
             view.hideForm();
         });
+        view.setButtonAction("esubmit", function () {
+            view.hideForm();
+        });
+        
+        model.setAddPostCallback(view.addNewPost);
+        view.setPostHandler(model.post);
     };
 }
 
