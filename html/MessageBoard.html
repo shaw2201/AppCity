@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="../css/appCity.css">
+        <link rel="stylesheet" type="text/css" href="../css/MessageBoard.css">
         <title>Message Board</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     </head>
     <body>
-        <main id ="main">
+    <main id ="main">
         <header>Message Board</header>
         <div id="chatholder">
-            
+
         </div>
         <div id="chatformdiv">
+            <a href="./index.html"><button id="home">Home</button></a>
             <form id="chatform">
                 <input type="text" id="postmessage">
-                <input type="submit" id="postsubmit" value="Post">
+                <button type="submit" id="postsubmit"> Post</button>
             </form>
         </div>
-        </main>
-    </body>
+        <div id="formHolder" style="display: none">
+            <form id="replyform">
+                Reply :<br>
+                <textarea id="replyMsg" name="replyMsg" form="replyform"></textarea>
+                <br>
+                <input type="submit" value="Post" id="rsubmit">
+                <button id="rcancel">Cancel</button>
+            </form>
+
+        </div>
+        <div id="nameFormHolder" style="display: none">
+            <form id="nameform">
+                Name :<br>
+                <input type="text" id="name">
+                <br>
+                <input type="submit" value="ok" id="nsubmit">
+                <button id="ncancel">Cancel</button>
+            </form>
+
+        </div>
+    </main>
+    <script src="../javascript/MBoardModel.js"></script>
+    <script src="../javascript/MBoardView.js"></script>
+    <script src="../javascript/MBoardController.js"></script>
+</body>
 </html>
