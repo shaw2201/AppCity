@@ -10,7 +10,7 @@ function eventController() {
         model.init();
         view.init();
 
-        view.setButtonAction("addEvent", function () {
+        view.setButtonAction("add", function () {
             view.showForm();
         });
         view.setButtonAction("ecancel", function () {
