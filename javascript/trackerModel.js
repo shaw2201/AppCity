@@ -248,17 +248,8 @@ function TrackerModel() {
         return map;
     };
     this.start = function() {
-        if (positionArray.length > 0) {
-            poly.setMap(null);
-            marker.setMap(null);
-            endMarker.setMap(null);
-            geo = navigator.geolocation;
-            console.log(geo);
-        }
-        positionArray = [];
         if (geo) {
             geo.getCurrentPosition(function(position) {
-                console.log("here as well");
                 pos = new google.maps.LatLng(position.coords.latitude,
                         position.coords.longitude);
                 positionArray.push(pos);
@@ -293,14 +284,14 @@ function TrackerModel() {
         return pathDistance;
     };
     this.reset = function() {
-        if (positionArray.length > 0) {
-            pathDistance = 0;
-            positionArray = [];
-            poly.setMap(null);
-            marker.setMap(null);
-            loadMarker.setMap(null);
-            endMarker.setMap(null);
+        pathDistance = 0;
+        positionArray = [];
+        poly.setMap(null);
+        marker.setMap(null);
+        loadMarker.setMap(null);
+        endMarker.setMap(null);
 
+        if (!loadBoolean) {
             geo.clearWatch(watch);
             watch = 0;
             geo = navigator.geolocation;
@@ -312,14 +303,22 @@ function TrackerModel() {
             positionArray = [];
             poly.setMap(null);
             marker.setMap(null);
-            this.init();
         }
+        loadBoolean = true;
         var latitude = JSON.parse(lat), longitude = JSON.parse(long), p;
         for (var i = 0; i < latitude.length; i++) {
             var tempPos = new google.maps.LatLng(latitude[i],
                     longitude[i]);
             positionArray.push(tempPos);
         }
+    };
+
+    this.getLoad = function(){
+        return loadBoolean;
+    };
+    
+    this.setLoad = function(lBool){
+        loadBoolean = lBool;
     };
 
     this.postPath = function() {

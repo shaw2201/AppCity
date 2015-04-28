@@ -14,12 +14,13 @@ function TrackerController() {
                 trackerView.showMap();
                 trackerModel.load(l, lo);
                 trackerModel.init();
+                trackerView.hideStartStop();
             });
         });
 
         trackerView.setButtonAction("start", function() {
             trackerModel.start();
- 
+            trackerView.setMap(trackerModel.getMap());
         });
         trackerView.setButtonAction("stop", function() {
             trackerModel.stop();
@@ -31,6 +32,10 @@ function TrackerController() {
             trackerView.hidePopup();
             trackerView.showMap();
             location.href = "https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/html/RouteTracking.html";
+            location.reload();
+        });
+         trackerView.setButtonAction("refresh", function() {
+           location.href = "https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/html/RouteTracking.html";
             location.reload();
         });
         trackerView.setButtonAction("post", function() {

@@ -93,6 +93,11 @@ function TrackerView() {
         document.getElementById("ButtonDiv").style.display = "none";
         document.getElementById("map-canvas").style.display = "none";
     };
+    
+    this.hideStartStop = function() {
+        document.getElementById("start").style.display = "none";
+        document.getElementById("stop").style.display = "none";
+    }
 
     this.addNewPath = function(author, location, des, lat, long, id, callback) {
         var chatHolder = document.getElementById("chatholder"),

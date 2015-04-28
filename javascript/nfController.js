@@ -61,7 +61,7 @@ function NfController() {
         function swimmingSearch() {
           var request = {
                   bounds: map.getBounds(),
-                  keyword: 'swimming'
+                  keyword: 'swimming pool'
               };              
           service.radarSearch(request, swimmingCallback);
         };

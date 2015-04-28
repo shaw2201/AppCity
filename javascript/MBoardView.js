@@ -98,5 +98,11 @@ function MsgBoardView() {
             };
         document.getElementById("chatholder").addEventListener("touchstart", f, true);
         document.getElementById("chatholder").addEventListener("touchmove", d, true);
+        document.getElementById("replyform").addEventListener("submit", function(evt){
+          evt.preventDefault();  
+        });
+        document.getElementById("nameform").addEventListener("submit", function(evt){
+          evt.preventDefault();  
+        });
     };
 }
