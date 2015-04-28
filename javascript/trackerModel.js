@@ -11,10 +11,13 @@ function TrackerModel() {
             geo,
             poly,
             intervalObject,
+            loadBoolean,
             positionArray = [],
             latArray = [],
             longArray = [],
+            loadMarker = 0,
             marker,
+            endMarker,
             options,
             map,
             content,
@@ -127,21 +130,75 @@ function TrackerModel() {
                 };
                 map.setCenter(options.position);
             },
-            updatePosition = function() {
-                geo.getCurrentPosition(function(position) {
-                    pos = new google.maps.LatLng(position.coords.latitude + testingVariable,
-                            position.coords.longitude + testingVariable);
-                    latArray.push(position.coords.latitude + testingVariable);
-                    longArray.push(position.coords.longitude + testingVariable);
-                    testingVariable = testingVariable + 0.0001;
-                    document.getElementById("check").innerHTML = "lat: " + position.coords.latitude + " long: " + position.coords.longitude + " watch";
-                    positionArray.push(pos);
-                    map.setCenter(pos);
-                    poly.setMap(null);
-                    polyOptions.path = positionArray;
-                    poly = new google.maps.Polyline(polyOptions);
-                    poly.setMap(map);
+            placeCurrentMarker = function(p) {
+                if (loadMarker !== 0) {
+                    loadMarker.setMap(null);
+
+                }
+                loadMarker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: "You"
                 });
+                var infowindow = new google.maps.InfoWindow({
+                    content: "Current Position"
+                });
+                google.maps.event.addListener(loadMarker, 'click', function() {
+                    infowindow.open(map, loadMarker);
+                    console.log("clicked");
+                });
+            },
+            placeStartMarker = function(p) {
+                marker = new google.maps.Marker({
+                    position: positionArray[0],
+                    map: map,
+                    icon: 'https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/running.png',
+                    title: "Start"
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: "Start of route"
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
+            },
+            placeEndMarker = function(location) {
+                endMarker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    icon: 'https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/checkered-flags.jpg',
+                    title: "End"
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: "End of route"
+                });
+                google.maps.event.addListener(endMarker, 'click', function() {
+                    infowindow.open(map, endMarker);
+                });
+            },
+            updatePosition = function() {
+                if (loadBoolean === true) {
+                    geo.getCurrentPosition(function(position) {
+                        console.log("gets here too");
+                        pos = new google.maps.LatLng(position.coords.latitude,
+                                position.coords.longitude);
+                        map.setCenter(pos);
+                    });
+                } else {
+                    geo.getCurrentPosition(function(position) {
+                        pos = new google.maps.LatLng(position.coords.latitude,
+                                position.coords.longitude);
+                        latArray.push(position.coords.latitude);
+                        longArray.push(position.coords.longitude);
+                        positionArray.push(pos);
+                        map.setCenter(pos);
+                        poly.setMap(null);
+                        polyOptions.path = positionArray;
+                        poly = new google.maps.Polyline(polyOptions);
+                        poly.setMap(map);
+                    });
+                }
+                placeCurrentMarker(pos);
             }, error = function(error) {
         console.log("failed");
     },
@@ -155,19 +212,21 @@ function TrackerModel() {
             poly = new google.maps.Polyline(polyOptions);
             poly.setMap(map);
             map.setCenter(positionArray[0]);
-            marker = new google.maps.Marker({
-                position: positionArray[0],
-                map: map,
-                icon: 'https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/running.png',
-                title: "Start"
+            placeStartMarker(positionArray[0]);
+            placeEndMarker(positionArray[positionArray.length - 1]);
+            loadBoolean = true;
+            geo.getCurrentPosition(function(position) {
+                pos = new google.maps.LatLng(position.coords.latitude,
+                        position.coords.longitude);
+                placeCurrentMarker(pos);
             });
+            watch = geo.watchPosition(updatePosition, error, options);
         } else {
             if (navigator.geolocation) {
                 geo = navigator.geolocation;
                 geo.getCurrentPosition(function(position) {
-                    pos = new google.maps.LatLng(position.coords.latitude + 0.001,
+                    pos = new google.maps.LatLng(position.coords.latitude,
                             position.coords.longitude);
-                    document.getElementById("check").innerHTML = "lat: " + position.coords.latitude + " long: " + position.coords.longitude;
                     map.setCenter(pos);
                     window.setInterval(checkQueue, 2000);
                     window.setInterval(checkPaths, 600);
@@ -189,26 +248,24 @@ function TrackerModel() {
         return map;
     };
     this.start = function() {
+        if (positionArray.length > 0) {
+            poly.setMap(null);
+            marker.setMap(null);
+            endMarker.setMap(null);
+            geo = navigator.geolocation;
+            console.log(geo);
+        }
+        positionArray = [];
         if (geo) {
             geo.getCurrentPosition(function(position) {
+                console.log("here as well");
                 pos = new google.maps.LatLng(position.coords.latitude,
                         position.coords.longitude);
                 positionArray.push(pos);
                 latArray.push(position.coords.latitude);
                 longArray.push(position.coords.longitude);
                 map.setCenter(pos);
-                marker = new google.maps.Marker({
-                    position: pos,
-                    map: map,
-                    icon: 'https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/running.png',
-                    title: "Start"
-                });
-                var infowindow = new google.maps.InfoWindow({
-                    content: "Start of route"
-                });
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map, marker);
-                });
+                placeStartMarker(pos);
                 polyOptions.path = positionArray;
                 poly = new google.maps.Polyline(polyOptions);
                 poly.setMap(map);
@@ -217,10 +274,11 @@ function TrackerModel() {
             });
         }
         ;
-//        watch = geo.watchPosition(updatePosition, error, options);
-        intervalObject = window.setInterval(updatePosition, 2000);
+        watch = geo.watchPosition(updatePosition, error, options);
+        //    intervalObject = window.setInterval(updatePosition, 2000);
     };
     this.stop = function() {
+        placeEndMarker(positionArray[positionArray.length - 1]);
         if (positionArray.length === 1) {
             pathDistance = 0;
         } else {
@@ -230,34 +288,37 @@ function TrackerModel() {
                 pathDistance = pathDistance + parseFloat(google.maps.geometry.spherical.computeDistanceBetween(positionArray[i], positionArray[i + 1]).toFixed(0));
             }
         }
-        testingVariable = 0.0001;
-        console.log(pathDistance);
     };
     this.getDistance = function() {
         return pathDistance;
     };
     this.reset = function() {
-        pathDistance = 0;
-        positionArray = [];
-        poly.setMap(null);
-        marker.setMap(null);
-        geo.clearWatch(watch);
-        watch = 0;
-        geo = navigator.geolocation;
-        window.clearInterval(intervalObject);
+        if (positionArray.length > 0) {
+            pathDistance = 0;
+            positionArray = [];
+            poly.setMap(null);
+            marker.setMap(null);
+            loadMarker.setMap(null);
+            endMarker.setMap(null);
+
+            geo.clearWatch(watch);
+            watch = 0;
+            geo = navigator.geolocation;
+        }
     };
 
     this.load = function(lat, long) {
-        if(positionArray.length > 0){
-             positionArray = [];
-             poly.setMap(null);
-             marker.setMap(null);
+        if (positionArray.length > 0) {
+            positionArray = [];
+            poly.setMap(null);
+            marker.setMap(null);
+            this.init();
         }
         var latitude = JSON.parse(lat), longitude = JSON.parse(long), p;
         for (var i = 0; i < latitude.length; i++) {
-            pos = new google.maps.LatLng(latitude[i],
+            var tempPos = new google.maps.LatLng(latitude[i],
                     longitude[i]);
-            positionArray.push(pos);
+            positionArray.push(tempPos);
         }
     };
 

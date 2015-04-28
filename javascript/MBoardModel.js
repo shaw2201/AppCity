@@ -200,7 +200,7 @@ function MsgBoardModel() {
             username = localStorage.rqb12154_newusername;
         }
         window.setInterval(checkQueue, 900);
-        window.setInterval(checkPosts, 600);
-        window.setInterval(checkReplies, 700);
+        window.setInterval(checkPosts, 400);
+        window.setInterval(checkReplies, 500);
     };
 }

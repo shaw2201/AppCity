@@ -6,31 +6,28 @@ function TrackerController() {
             trackerModel = new TrackerModel();
     this.init = function() {
 
+        trackerView.init();
+
         trackerModel.setPathCallback(function(author, location, des, lat, long, pid) {
             trackerView.addNewPath(author, location, des, lat, long, pid, function(l, lo) {
                 trackerView.hideLoad();
                 trackerView.showMap();
                 trackerModel.load(l, lo);
                 trackerModel.init();
-                var pos = trackerModel.getPosArray();
-                console.log(pos.length);
-                trackerView.centreMap(pos[pos.length - 1]);
             });
         });
 
         trackerView.setButtonAction("start", function() {
             trackerModel.start();
+ 
         });
         trackerView.setButtonAction("stop", function() {
             trackerModel.stop();
-            var pos = trackerModel.getPosArray();
-            trackerView.centreMap(pos[pos.length - 1]);
             trackerView.showPopup(trackerModel.getDistance());
             trackerView.hideMap();
         });
         trackerView.setButtonAction("return", function() {
             trackerModel.reset();
-            trackerView.reset();
             trackerView.hidePopup();
             trackerView.showMap();
             location.href = "https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/html/RouteTracking.html";
@@ -66,7 +63,6 @@ function TrackerController() {
 
         trackerModel.init();
         trackerView.setMap(trackerModel.getMap());
-        trackerView.init();
 
     };
 }

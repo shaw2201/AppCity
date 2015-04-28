@@ -3,7 +3,9 @@
     <head>
         <link rel="stylesheet" type="text/css" href="../css/MessageBoard.css">
         <title>Message Board</title>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     </head>
     <body>
@@ -15,7 +17,7 @@
         <div id="chatformdiv">
             <a href="./index.html"><button id="home">Home</button></a>
             <form id="chatform">
-                <input type="text" id="postmessage">
+                <input type="text" id="postmessage" autocomplete="off">
                 <button type="submit" id="postsubmit"> Post</button>
             </form>
         </div>
@@ -32,11 +34,12 @@
         <div id="nameFormHolder" style="display: none">
             <form id="nameform">
                 Name :<br>
-                <input type="text" id="name">
+                <input type="text" id="name" autocomplete="off">
                 <br>
                 <input type="submit" value="ok" id="nsubmit">
-                <button id="ncancel">Cancel</button>
+                <button id="ncancel" onclick="">Cancel</button>
             </form>
+            
 
         </div>
     </main>

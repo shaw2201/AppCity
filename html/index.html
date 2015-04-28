@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="icon" sizes="192x192" href="Images/breakoutiosf.png" />
-        <link rel="apple-touch-icon" href="Images/breakoutiosf.png" />
-        <link rel="shortcut icon" href="Images/breakoutiosf.png" type="image/x-icon" />
-        <link rel="stylesheet" type="text/css" href="https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/css/appCity.css"> 
+        <link rel="apple-touch-icon" href="..images/icon.png" />
+        <link rel="shortcut icon" href="../images/icon.png" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../css/appCity.css"> 
+        <meta content="yes" name="mobile-web-app-capable">
+        <meta content="yes" name="apple-mobile-web-app-capable">
         <title>AppCity Fitness</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -12,15 +13,22 @@
 
     <body>    
     <main id ="main">
-        <div class="Menu">
-            <p> Welcome to Group 15's app</p>
-            <br>
-            <a href="./RouteTracking.html"><button id="track"> Track Route </button></a>
-            <a href="./MessageBoard.html"><button id="message"> Message Board </button></a>
-            <br>
-            <a href="./EventBoard.html"><button id="event"> Event Board </button></a>
-            <a href="./NearbyLocations.html"><button id="leisure"> Leisure centre's</button></a>
+        <header> Welcome to Group 15's app</header>
+        <div id="menu" class="Menu">
+            <div id="buttonGroup1"> 
+                <a href="./RouteTracking.html"><button id="track"> Track Route </button></a>
+                <a href="./MessageBoard.html"><button id="message"> Message Board </button></a>
+            </div>
+            <div id="buttonGroup2"> 
+                <a href="./EventBoard.html"><button id="event"> Event Board </button></a>
+                <a href="./NearbyLocations.html"><button id="leisure">Nearby Facilities</button></a>
+            </div>
         </div>
     </main>
+
+    <script src="javascript/appModel.js"></script>
+    <script src="javascript/appView.js"></script>
+    <script src="javascript/appController.js"></script>
+
 </body>
 </html>

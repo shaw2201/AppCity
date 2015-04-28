@@ -2,7 +2,7 @@
 "use strict";
 
 function TrackerView() {
-    var map, marker;
+    var map, marker, moved = false;
     // Note: This example requires that you consent to location sharing when
     // prompted by your browser. If you see a blank space instead of the map, this
     // is probably because you have denied permission for location sharing.
@@ -17,33 +17,26 @@ function TrackerView() {
                 };
         element.addEventListener("mouseup", f, false);
         element.addEventListener("touchend", f, false);
-    },
-            placeMarker = function(location) {
-                marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    icon: 'https://devweb2014.cis.strath.ac.uk/~fqb12152/317/AppCity/images/checkered-flags.jpg',
-                    title: "End"
-                });
-                var infowindow = new google.maps.InfoWindow({
-                    content: "End of route"
-                });
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map, marker);
-                });
-            };
+    };
 
     this.init = function() {
         document.getElementById("popup").style.display = "none";
+        var f = function(e) {
+            console.log("touch registered");
+            moved = false;
+            return true;
+        },
+                d = function(e) {
+                    console.log("move registered");
+                    moved = true;
+                    return true;
+                };
+        document.getElementById("chatholder").addEventListener("touchstart", f, true);
+        document.getElementById("chatholder").addEventListener("touchmove", d, true);
     };
-
-    this.reset = function() {
-        marker.setMap(null);
-    }
 
     this.centreMap = function(pos) {
         map.setCenter(pos);
-        placeMarker(pos);
     };
 
     this.setMap = function(m) {
@@ -60,10 +53,12 @@ function TrackerView() {
         //handle showing about box purely within the view as their's no model involved
         document.getElementById("distanceTraveled").innerHTML = "You ran a distance of " + dis + "m";
         document.getElementById("popup").style.display = "block";
+        document.getElementById("stopMessage").style.display = "block";
     };
     this.hidePopup = function() {
         //handle hiding about box purely within the view
         document.getElementById("popup").style.display = "none";
+        document.getElementById("stopMessage").style.display = "none";
     };
 
     this.showForm = function() {
@@ -72,14 +67,14 @@ function TrackerView() {
     this.hideForm = function() {
         document.getElementById("formHolder").style.display = "none";
     };
-    
+
     this.showPost = function() {
         document.getElementById("postMessage").style.display = "block";
     };
     this.hidePost = function() {
         document.getElementById("postMessage").style.display = "none";
     };
-    
+
     this.showLoad = function() {
         document.getElementById("loadMenu").style.display = "block";
         document.getElementById("chatholder").style.display = "block";
@@ -88,27 +83,25 @@ function TrackerView() {
         document.getElementById("loadMenu").style.display = "none";
         document.getElementById("chatholder").style.display = "none";
     };
-    
+
     this.showMap = function() {
         document.getElementById("map-canvas").style.display = "block";
         document.getElementById("ButtonDiv").style.display = "block";
-        document.getElementById("check").style.display = "block";
     };
-    
+
     this.hideMap = function() {
         document.getElementById("ButtonDiv").style.display = "none";
         document.getElementById("map-canvas").style.display = "none";
-        document.getElementById("check").style.display = "none";
     };
-    
-    this.addNewPath = function (author, location, des, lat, long, id, callback) {
+
+    this.addNewPath = function(author, location, des, lat, long, id, callback) {
         var chatHolder = document.getElementById("chatholder"),
-            node = document.createElement("DIV"),
-            node2 = document.createElement("DIV"),
-            node3 = document.createElement("DIV"),
-            namenode = document.createTextNode("Author: " + author),
-            locnode = document.createTextNode("Location: " + location),
-            desnode = document.createTextNode("Description: " + des);
+                node = document.createElement("DIV"),
+                node2 = document.createElement("DIV"),
+                node3 = document.createElement("DIV"),
+                namenode = document.createTextNode("Author: " + author),
+                locnode = document.createTextNode("Location: " + location),
+                desnode = document.createTextNode("Description: " + des);
 
         node.className = "chatPostDiv";
         node.id = id;
@@ -119,9 +112,10 @@ function TrackerView() {
         node.appendChild(node3);
         chatHolder.appendChild(node);
         addMouseAndTouchUp(id, function(evt) {
-            evt.preventDefault();
-            console.log("clicked");
-            callback(lat, long);
+            if (!moved) {
+                evt.preventDefault();
+                callback(lat, long);
+            }
         });
     };
 }

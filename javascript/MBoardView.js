@@ -17,14 +17,6 @@ function MsgBoardView() {
             console.log("form shown");
             document.getElementById("formHolder").style.display = "block";
         },
-        hideForm = function () {
-            console.log("form hidden");
-            document.getElementById("formHolder").style.display = "none";
-        },
-        hideNameForm = function () {
-            console.log("name form hidden");
-            document.getElementById("nameFormHolder").style.display = "none";
-        },
         moved = false;
 
     this.addNewPost = function (msg, username, id, callback) {
@@ -68,16 +60,6 @@ function MsgBoardView() {
         //as an eventlisteners to the given parameters
         addMouseAndTouchUp(button, callback);
     };
-    this.setReplyHandler = function (callback) {
-        document.getElementById("replyform").addEventListener("submit", function (evt) {
-            console.log("Reply Posted");
-            var val = document.getElementById("replyMsg").value;
-            document.getElementById("replyMsg").value = "";
-            evt.preventDefault();
-            callback(val);
-            hideForm();
-        });
-    };
     this.setPostHandler = function (callback) {
         document.getElementById("chatform").addEventListener("submit", function (evt) {
             console.log("Msg Posted");
@@ -85,16 +67,6 @@ function MsgBoardView() {
             document.getElementById("postmessage").value = "";
             evt.preventDefault();
             callback(val);
-        });
-    };
-    this.setNameHandler = function (callback) {
-        document.getElementById("nameform").addEventListener("submit", function (evt) {
-            var val = document.getElementById("name").value;
-            console.log("name set to : " + val);
-            document.getElementById("name").value = "";
-            evt.preventDefault();
-            callback(val);
-            hideNameForm();
         });
     };
     this.showForm = function () {

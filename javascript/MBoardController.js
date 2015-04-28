@@ -14,16 +14,35 @@ function MsgBoardController() {
         });
         MBoardModel.setReplyCallback(MBoardView.addNewReply);
         MBoardView.setPostHandler(MBoardModel.post);
-        MBoardView.setReplyHandler(MBoardModel.reply);
         MBoardView.setButtonAction("rcancel", function () {
             MBoardView.hideForm();
         });
+        MBoardView.setButtonAction("rsubmit", function (evt) {
+            console.log("Reply Posted");
+            var val = document.getElementById("replyMsg").value;
+            document.getElementById("replyMsg").value = "";
+            evt.preventDefault();
+            MBoardModel.reply(val);
+            MBoardView.hideForm();
+        });
+
         MBoardView.setButtonAction("ncancel", function () {
             MBoardView.hideNameForm();
         });
+
+        MBoardView.setButtonAction("nsubmit", function (evt) {
+            var val = document.getElementById("name").value;
+            document.getElementById("name").value = "";
+            evt.preventDefault();
+            if (val !== "") {
+                MBoardModel.setUsername(val);
+                console.log("name set to : " + val);
+            }
+            MBoardView.hideNameForm();
+        });
+
         console.log("name is : " + MBoardModel.getUsername());
-        MBoardView.setNameHandler(MBoardModel.setUsername);
-        if (MBoardModel.getUsername() == "Unknown") {
+        if (MBoardModel.getUsername() === "Unknown") {
             MBoardView.showNameForm();
         }
     };
