@@ -29,7 +29,10 @@ function eventView() {
         };
         
         this.init = function () {
-    };
+            document.getElementById("eventform").addEventListener("submit", function (evt) {
+                evt.preventDefault();
+            });
+        };
     
     this.addNewPost = function (name, description, date, time, location) {
         var eventHolder = document.getElementById("eventsHolder"),
@@ -42,8 +45,8 @@ function eventView() {
             
             nnode = document.createTextNode(name),
             dnode = document.createTextNode(description),
-            datenode = document.createTextNode(date),
-            tnode = document.createTextNode(time),
+            datenode = document.createTextNode("Date: " +date),
+            tnode = document.createTextNode("Time: " +time),
             lnode = document.createTextNode(location);
             
             node.className = "eventPostDiv";
@@ -68,7 +71,7 @@ function eventView() {
     };
 
     this.setPostHandler = function (callback) {
-        document.getElementById("eventform").addEventListener("submit", function (evt) {
+        setButtonaction("esubmit", function (evt) {
             var name = document.getElementById("ename").value;
             document.getElementById("ename").value = "";
             var description = document.getElementById("edescription").value;
