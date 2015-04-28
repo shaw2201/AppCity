@@ -17,11 +17,6 @@ function MsgBoardView() {
             console.log("form shown");
             document.getElementById("formHolder").style.display = "block";
         },
-        setButtonAction = function (button, callback) {
-        //Generic method for using the local method AddMouseAndTouchUp to assigning the given call back 
-        //as an eventlisteners to the given parameters
-            addMouseAndTouchUp(button, callback);
-        },
         hideForm = function () {
             console.log("form hidden");
             document.getElementById("formHolder").style.display = "none";
@@ -29,7 +24,8 @@ function MsgBoardView() {
         hideNameForm = function () {
             console.log("name form hidden");
             document.getElementById("nameFormHolder").style.display = "none";
-        };
+        },
+        moved = false;
 
     this.addNewPost = function (msg, username, id, callback) {
         var chatHolder = document.getElementById("chatholder"),
@@ -45,10 +41,12 @@ function MsgBoardView() {
         node.appendChild(node2);
         chatHolder.appendChild(node);
         node.scrollIntoView();
-        addMouseAndTouchUp(id, function(evt) {
-            evt.preventDefault();
-            showForm();
-            callback(id);
+        addMouseAndTouchUp(id, function (evt) {
+            if (!moved) {
+                evt.preventDefault();
+                showForm();
+                callback(id);
+            }
         });
     };
     this.addNewReply = function (msg, username, id) {
@@ -63,7 +61,7 @@ function MsgBoardView() {
         node2.appendChild(msgnode);
         node.appendChild(node2);
         postHolder.appendChild(node);
-        document.getElementById("postmessage").scrollIntoView();
+        postHolder.scrollIntoView();
     };
     this.setButtonAction = function (button, callback) {
         //Generic method for using the local method AddMouseAndTouchUp to assigning the given call back 
@@ -116,5 +114,17 @@ function MsgBoardView() {
         document.getElementById("nameFormHolder").style.display = "none";
     };
     this.init = function () {
+        var f = function (e) {
+                console.log("touch registered");
+                moved = false;
+                return true;
+            },
+            d = function (e) {
+                console.log("move registered");
+                moved = true;
+                return true;
+            };
+        document.getElementById("chatholder").addEventListener("touchstart", f, true);
+        document.getElementById("chatholder").addEventListener("touchmove", d, true);
     };
 }

@@ -8,6 +8,7 @@ function MsgBoardController() {
 
     this.init = function () {
         MBoardModel.init();
+        MBoardView.init();
         MBoardModel.setPostCallback(function (message, username, pid) {
             MBoardView.addNewPost(message, username, pid, MBoardModel.setReplyToPID);
         });
