@@ -103,3 +103,12 @@ input {
     width: auto;
     height: auto;
 }
+#eventform{
+    padding: 5vmin;
+    position: absolute;
+    top: 10vmin;
+    left: 50vw;
+    margin-left: -35vmin; /*half-width + padding*/
+    background: #e2f0d9;
+    width: 60vmin;
+}

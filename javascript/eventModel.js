@@ -48,7 +48,6 @@ function eventModel() {
             };
 
             xhr.send(); // Send the request to send-ajax-data.php
-            window.setTimeout(checkQueue, 100);
             window.setTimeout(checkPosts, 300);
        },
         checkQueue = function () {
